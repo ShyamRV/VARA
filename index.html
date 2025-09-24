@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VARA - ECLSS Fault Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-bg': '#030814',
+              'brand-surface': '#0a192f',
+              'brand-text': '#ccd6f6',
+              'brand-text-light': '#8892b0',
+              'brand-accent': '#64ffda',
+              'brand-accent-secondary': '#c084fc',
+              'brand-accent-warn': '#ffcc00',
+              'brand-accent-danger': '#ff4d4d',
+            },
+            fontFamily: {
+                sans: ['"Segoe UI"', 'Roboto', 'sans-serif'],
+                mono: ['"Roboto Mono"', 'monospace'],
+                orbitron: ['"Orbitron"', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+      @keyframes move-grid {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 -100vh; }
+      }
+      @keyframes button-scan {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+
+      body {
+        background-color: #030814;
+        background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"%3E%3Cg fill-rule="evenodd"%3E%3Cg fill="%2364ffda" fill-opacity="0.05"%3E%3Cpath d="M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        position: relative;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 200vh;
+        background-image: 
+            linear-gradient(to right, rgba(100, 255, 218, 0.1) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(100, 255, 218, 0.1) 1px, transparent 1px);
+        background-size: 4rem 4rem;
+        animation: move-grid 20s linear infinite;
+        z-index: -1;
+        will-change: background-position;
+      }
+
+      .text-glow-accent {
+        text-shadow: 0 0 8px rgba(100, 255, 218, 0.8);
+      }
+      .text-glow-danger {
+        text-shadow: 0 0 8px rgba(255, 77, 77, 0.8);
+      }
+
+      .sci-fi-panel {
+        background: radial-gradient(circle at 100% 0, rgba(192, 132, 252, 0.08), transparent 40%),
+                    radial-gradient(circle at 0% 100%, rgba(100, 255, 218, 0.08), transparent 40%),
+                    rgba(10, 25, 47, 0.5);
+        border: 1px solid rgba(100, 255, 218, 0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: inset 0 0 20px rgba(3, 8, 20, 0.5);
+        position: relative;
+        transition: all 0.3s ease;
+      }
+      
+      .sci-fi-panel::before, .sci-fi-panel::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-style: solid;
+        border-color: #64ffda;
+      }
+      .sci-fi-panel::before {
+        top: -1px; left: -1px;
+        border-width: 2px 0 0 2px;
+      }
+      .sci-fi-panel::after {
+        bottom: -1px; right: -1px;
+        border-width: 0 2px 2px 0;
+      }
+      
+      .sci-fi-button {
+        background-color: rgba(100, 255, 218, 0.05);
+        border: 1px solid rgba(100, 255, 218, 0.5);
+        color: #64ffda;
+        text-shadow: 0 0 8px rgba(100, 255, 218, 0.7);
+        transition: all 0.2s ease-in-out;
+        clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        position: relative;
+        overflow: hidden;
+      }
+      .sci-fi-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(192, 132, 252, 0.5), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+      }
+      .sci-fi-button:hover::before {
+        animation: button-scan 1.5s ease-in-out infinite;
+      }
+      .sci-fi-button:hover {
+        background-color: rgba(100, 255, 218, 0.1);
+        border-color: #64ffda;
+        box-shadow: 0 0 16px rgba(100, 255, 218, 0.5);
+      }
+      .sci-fi-button:disabled {
+        border-color: rgba(136, 146, 176, 0.3);
+        color: #8892b0;
+        text-shadow: none;
+        background-color: rgba(136, 146, 176, 0.05);
+        cursor: not-allowed;
+      }
+      .sci-fi-button:disabled:hover::before {
+        animation: none;
+      }
+
+      .pulse-alert {
+        animation: pulse-animation 1.5s infinite;
+      }
+      @keyframes pulse-animation {
+        0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); }
+        70% { box-shadow: 0 0 0 12px rgba(255, 204, 0, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
+      }
+      
+      /* Recharts styling */
+      .recharts-wrapper { filter: drop-shadow(0 0 5px rgba(100, 255, 218, 0.3)); }
+      .recharts-legend-wrapper { filter: none; }
+      .recharts-cartesian-grid-horizontal line, .recharts-cartesian-grid-vertical line {
+        stroke-opacity: 0.3;
+      }
+
+      /* Hologram Styles */
+      .hologram-container { position: relative; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; background: radial-gradient(ellipse at 50% 100%, rgba(100, 255, 218, 0.1), transparent 70%); }
+      .hologram-grid { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background-image: linear-gradient(rgba(100, 255, 218, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(100, 255, 218, 0.15) 1px, transparent 1px); background-size: 20px 20px; transform: perspective(300px) rotateX(75deg); transform-origin: bottom; opacity: 0.5; }
+      .hologram-svg { width: 100%; height: 100%; position: relative; z-index: 10; animation: hologram-float 8s ease-in-out infinite, hologram-flicker 15s infinite; transition: filter 0.5s ease; filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.6)); }
+      .hologram-speaking .speaking-glow { filter: drop-shadow(0 0 10px #64ffda); stroke: #fff; }
+      .hologram-speaking .speaking-hand { transform: translateY(-5px); }
+      .hologram-base { position: absolute; bottom: 1rem; width: 40%; height: 5px; background: #64ffda; border-radius: 50%; box-shadow: 0 0 20px 6px #64ffda; filter: blur(3px); z-index: 5; }
+      .hologram-light-cone { position: absolute; bottom: 1rem; width: 100%; height: 100%; background: linear-gradient(to top, rgba(100, 255, 218, 0.2), transparent 70%); clip-path: polygon(30% 100%, 70% 100%, 100% 0, 0 0); opacity: 0.5; }
+      .data-rings { position: absolute; bottom: 1rem; width: 100%; height: 100%; transform-style: preserve-3d; }
+      .data-ring { position: absolute; left: 25%; bottom: 0; width: 50%; aspect-ratio: 2 / 1; border: 1px solid rgba(100, 255, 218, 0.5); border-radius: 50%; transform: rotateX(80deg) translateZ(-50px); animation: data-ring-pulse 4s ease-in-out infinite; }
+      .data-ring:nth-child(2) { animation-delay: -2s; border-style: dashed; }
+      .particle { position: absolute; width: 2px; height: 2px; background: #64ffda; border-radius: 50%; opacity: 0; animation: particle-float 10s linear infinite; }
+      @keyframes hologram-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+      @keyframes hologram-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 1; } 50.1% { opacity: 0.9; } 50.2% { opacity: 1; } 75% { opacity: 1; } 75.1% { opacity: 0.95; } 75.2% { opacity: 1; } }
+      @keyframes data-ring-pulse { 0%, 100% { transform: rotateX(80deg) translateZ(-50px) scale(1); opacity: 0.5; } 50% { transform: rotateX(80deg) translateZ(20px) scale(1.5); opacity: 0; } }
+      @keyframes particle-float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-250px) translateX(10px); opacity: 0; } }
+   
+      /* Anomaly Gauge Styles */
+      .gauge-bg { fill: rgba(100, 255, 218, 0.1); }
+      .gauge-arc {
+        fill: none;
+        stroke: url(#gaugeGradient);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.5s ease-out;
+        transform: rotate(-90deg);
+        transform-origin: center;
+      }
+    </style>
+    <script type="importmap">
+    {
+      "imports": {
+        "recharts": "https://aistudiocdn.com/recharts@^3.2.1",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+        "react/": "https://aistudiocdn.com/react@^19.1.1/",
+        "react": "https://aistudiocdn.com/react@^19.1.1"
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-brand-bg text-brand-text">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

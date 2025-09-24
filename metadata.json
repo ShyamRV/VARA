@@ -1,0 +1,5 @@
+{
+  "name": "VARA Virtual Astronaut Resilient Assisstant",
+  "description": "An interactive dashboard that simulates telemetry data for an Environmental Control and Life Support System (ECLSS), injects anomalies, runs mock diagnoses and recovery simulations, and provides explainable AI-driven answers with Text-to-Speech.",
+  "requestFramePermissions": []
+}
